@@ -1,1 +1,1 @@
-include ':invoker', ':LibMarsdaemon'
+include ':app', ':LibMarsdaemon'

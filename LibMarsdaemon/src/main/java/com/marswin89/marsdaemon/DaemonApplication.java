@@ -2,6 +2,7 @@ package com.marswin89.marsdaemon;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 /**
  * make your Application extends it 
@@ -22,6 +23,7 @@ public abstract class DaemonApplication extends Application{
 	private IDaemonClient mDaemonClient;
 	public DaemonApplication(){
 		mDaemonClient = new DaemonClient(getDaemonConfigurations());
+
 	}
 	
 	
