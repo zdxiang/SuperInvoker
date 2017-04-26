@@ -29,11 +29,11 @@
 
 
     <application
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:name=".application.MyApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="BBBBBB"
-        android:supportsRtl="false"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <activity
