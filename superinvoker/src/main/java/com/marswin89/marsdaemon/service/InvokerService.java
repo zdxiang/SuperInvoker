@@ -31,7 +31,7 @@ public class InvokerService extends Service {
         if (!AppUtils.isServiceExisted(context, InvokerService.class.getName())) {
             Intent intent = new Intent(context, InvokerService.class);
             intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-//            context.startService(intent);// TODO: 17-4-24 这里不需要自己start了,MarsDaemo已经做了
+            context.startService(intent);
         }
     }
 

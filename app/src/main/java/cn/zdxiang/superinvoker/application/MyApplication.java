@@ -24,6 +24,11 @@ public class MyApplication extends DaemonApplication {
         super.onCreate();
     }
 
+    @Override
+    public void attachBaseContextByDaemon(Context base) {
+        super.attachBaseContextByDaemon(base);
+        InvokerService.start(base);
+    }
 
     /**
      * give the configuration to lib in this callback
@@ -67,6 +72,7 @@ public class MyApplication extends DaemonApplication {
         @Override
         public void onWatchDaemonDaed() {
             Log.d("fuck", "onWatchDaemonDaed");
+            InvokerService.start(getApplicationContext());
         }
     }
 }
