@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.marswin89.marsdaemon.PackageUtils;
+import com.marswin89.marsdaemon.service.InvokerService;
 
 //import com.marswin89.marsdaemon.PackageUtils;
 
@@ -26,7 +27,8 @@ public class ShutDownReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, "关机", Toast.LENGTH_SHORT).show();
-        PackageUtils.setComponentDefault(context, "cn.zdxiang.superinvoker.service.InvokerService");
+//        PackageUtils.setComponentDefault(context, "cn.zdxiang.superinvoker.service.InvokerService");
+        PackageUtils.setComponentDefault(context, InvokerReceiver.class.getCanonicalName());
 //        AppUtils.isServiceExisted(context, "");
     }
 }
