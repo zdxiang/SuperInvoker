@@ -47,7 +47,6 @@ public class InvokerService extends Service {
         Log.d(Tag, "onStartCommand");
         initScreenObserver();
         InnerService.start(this);
-//        sendBroadcast(new Intent(InvokerService.this, NotifyReceiver.class));//just for test
         return START_STICKY;
     }
 
