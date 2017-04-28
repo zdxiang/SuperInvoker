@@ -93,7 +93,7 @@ public class ScreenObserver {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
-         mContext.registerReceiver(mScreenReceiver, filter);
+        mContext.registerReceiver(mScreenReceiver, filter);
     }
 
     /**
@@ -112,8 +112,14 @@ public class ScreenObserver {
     }
 
     public interface ScreenStateListener {
+        /**
+         * Revoke when screen on
+         */
         void onScreenOn();
 
+        /**
+         * Revoke when screen off
+         */
         void onScreenOff();
     }
 }

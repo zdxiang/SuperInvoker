@@ -1,4 +1,4 @@
-package com.marswin89.marsdaemon;
+package com.marswin89.marsdaemon.utils;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -19,7 +19,7 @@ public class PackageUtils {
 	public static void setComponentDefault(Context context, String componentClassName){
 		PackageManager pm = context.getPackageManager();
 		ComponentName componentName = new ComponentName(context.getPackageName(), componentClassName);
-		pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, PackageManager.DONT_KILL_APP);
+		pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-package com.marswin89.marsdaemon.manager;
+package cn.zdxiang.invoker.manager;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -11,8 +11,8 @@ import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.marswin89.marsdaemon.OnePxAct;
-import com.marswin89.marsdaemon.service.InvokerService;
+import cn.zdxiang.invoker.OnePxAct;
+import cn.zdxiang.invoker.service.InvokerService;
 
 import java.lang.ref.WeakReference;
 
@@ -40,8 +40,6 @@ public class KeepLiveManager {
 
     public void initOnePx(OnePxAct mainActivity) {
         this.mWeakActivityRef = new WeakReference<>(mainActivity);
-
-        // 设置1像素透明窗口
         Window window = mainActivity.getWindow();
         window.setGravity(Gravity.LEFT | Gravity.TOP);
         WindowManager.LayoutParams params = window.getAttributes();

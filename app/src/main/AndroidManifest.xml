@@ -52,7 +52,7 @@
 
 
         <activity
-            android:name="com.marswin89.marsdaemon.OnePxAct"
+            android:name="cn.zdxiang.invoker.OnePxAct"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard"
             android:excludeFromRecents="true"
             android:finishOnTaskLaunch="false"
@@ -312,7 +312,7 @@
 
 
         <service
-            android:name="com.marswin89.marsdaemon.service.InvokerService"
+            android:name="cn.zdxiang.invoker.service.InvokerService"
             android:process=":invokerservice">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -320,7 +320,7 @@
         </service>
 
         <service
-            android:name="com.marswin89.marsdaemon.service.InvokerService$InnerService"
+            android:name="cn.zdxiang.invoker.service.InvokerService$InnerService"
             android:process=":invokerservice"
             />
 
@@ -328,12 +328,25 @@
             android:name="com.marswin89.marsdaemon.receiver.EmptyReceiver"
             android:process=":invokerservice"/>
         <service
-            android:name="com.marswin89.marsdaemon.service.CoreService"
+            android:name="cn.zdxiang.invoker.service.CoreService"
             android:process=":core"/>
         <receiver
             android:name="com.marswin89.marsdaemon.receiver.EmptyReceiver2"
             android:process=":core"/>
 
+        <service android:name="cn.zdxiang.invoker.service.BaseBizService$WorkNotificationService" />
+        <service
+            android:name="cn.zdxiang.invoker.service.JobSchedulerService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process=":watch" />
+        <service
+            android:name="cn.zdxiang.invoker.service.WatchDogService"
+            android:process=":watch" />
+        <service
+            android:name="cn.zdxiang.invoker.service.WatchDogService$WatchDogNotificationService"
+            android:process=":watch" />
     </application>
 
 </manifest>

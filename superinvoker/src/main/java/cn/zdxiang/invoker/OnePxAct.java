@@ -1,4 +1,4 @@
-package com.marswin89.marsdaemon;
+package cn.zdxiang.invoker;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.marswin89.marsdaemon.manager.KeepLiveManager;
+import cn.zdxiang.invoker.manager.KeepLiveManager;
 
 
 /**

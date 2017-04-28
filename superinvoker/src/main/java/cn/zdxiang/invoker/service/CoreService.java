@@ -1,4 +1,4 @@
-package com.marswin89.marsdaemon.service;
+package cn.zdxiang.invoker.service;
 
 import android.app.Service;
 import android.content.Intent;

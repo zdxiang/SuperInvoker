@@ -2,14 +2,15 @@ package com.marswin89.marsdaemon;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.marswin89.marsdaemon.receiver.EmptyReceiver;
 import com.marswin89.marsdaemon.receiver.EmptyReceiver2;
-import com.marswin89.marsdaemon.service.CoreService;
-import com.marswin89.marsdaemon.service.InvokerService;
+import cn.zdxiang.invoker.service.CoreService;
+import cn.zdxiang.invoker.service.InvokerService;
+
+import cn.zdxiang.invoker.InvokerEngine;
 
 /**
  * @author jm
@@ -27,14 +28,18 @@ public abstract class DaemonApplication extends Application {
         if (mDaemonClient.isDaemonPermitting(base)) {
             boolean b = mDaemonClient.onAttachBaseContext(base);
             if (!b) {
+//                Toast.makeText(base, "守护失败", Toast.LENGTH_SHORT).show();
+                InvokerEngine.initialize(this,InvokerService.class,InvokerEngine.DEFAULT_WAKE_UP_INTERVAL);
                 InvokerService.start(base);
-                Toast.makeText(base, "守护失败", Toast.LENGTH_SHORT).show();
             } else {
                 Log.d("DaemonApplication", "守护成功");
+                InvokerService.start(base);
             }
         } else {
-            InvokerService.start(base);
+            mDaemonClient.setDaemonPermiiting(base, false);
             Log.d("DaemonApplication", "这个设备不允许daemon");
+            InvokerEngine.initialize(this,InvokerService.class,InvokerEngine.DEFAULT_WAKE_UP_INTERVAL);
+            InvokerService.start(base);
         }
     }
 
