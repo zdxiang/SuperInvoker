@@ -29,8 +29,8 @@
 
 
     <application
-        android:allowBackup="true"
         android:name=".application.MyApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="BBBBBB"
         android:supportsRtl="true"
@@ -38,15 +38,11 @@
 
         <activity
             android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard"
-            android:excludeFromRecents="true"
-            android:finishOnTaskLaunch="false" >
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard">
 
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
 
@@ -68,7 +64,7 @@
         <receiver
             android:name="com.marswin89.marsdaemon.receiver.ShutDownReceiver"
             android:process=":invokerservice">
-            <intent-filter>
+            <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.ACTION_SHUTDOWN"/>
 
                 <category android:name="android.intent.category.HOME"/>
@@ -80,7 +76,7 @@
             android:name="com.marswin89.marsdaemon.receiver.BootReceiver"
             android:process=":invokerservice"
             >
-            <intent-filter>
+            <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.REBOOT"/>
             </intent-filter>
@@ -91,6 +87,10 @@
             android:enabled="true"
             android:exported="true"
             android:process=":invokerservice">
+
+            <intent-filter android:priority="1000">
+                <action android:name="com.wake.gray"/>
+            </intent-filter>
 
             <!--google-->
 
@@ -314,7 +314,7 @@
         <service
             android:name="com.marswin89.marsdaemon.service.InvokerService"
             android:process=":invokerservice">
-            <intent-filter>
+            <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </service>

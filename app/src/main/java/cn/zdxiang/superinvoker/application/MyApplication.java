@@ -1,6 +1,6 @@
 package cn.zdxiang.superinvoker.application;
 
-import com.marswin89.marsdaemon.InvokerApplication;
+import com.marswin89.marsdaemon.DaemonApplication;
 
 
 /**
@@ -9,7 +9,7 @@ import com.marswin89.marsdaemon.InvokerApplication;
  * @description
  */
 
-public class MyApplication extends InvokerApplication {
+public class MyApplication extends DaemonApplication {
 
     @Override
     public void onCreate() {

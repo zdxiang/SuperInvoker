@@ -16,5 +16,6 @@ public interface IDaemonClient {
 	 * 
 	 * @param base
 	 */
-	void onAttachBaseContext(Context base);
+	boolean onAttachBaseContext(Context base);
+
 }

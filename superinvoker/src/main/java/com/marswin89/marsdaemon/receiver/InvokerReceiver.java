@@ -1,8 +1,12 @@
 package com.marswin89.marsdaemon.receiver;
 
+import android.app.Notification;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,6 +31,12 @@ public class InvokerReceiver extends BroadcastReceiver {
     public static final String ACTION_TENCENT_REFRESH_WXAPP = "com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP";
 
 
+    /**
+     * 灰色保活手段唤醒广播的action
+     */
+//    public final static String GRAY_WAKE_ACTION = "com.wake.gray";
+
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
@@ -44,6 +54,7 @@ public class InvokerReceiver extends BroadcastReceiver {
 //                InvokerService.start(context);
 //                break;
 
+
         }
     }
 
@@ -55,6 +66,8 @@ public class InvokerReceiver extends BroadcastReceiver {
             Log.d(TAG, "服务不存在,启动");
             InvokerService.start(context);
         }
-
     }
+
+
 }
+
