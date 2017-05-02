@@ -28,7 +28,7 @@ public class OnePxAct extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         KeepLiveManager.getInstance().initOnePx(this);
-        Log.d("OnePxAct", "onCreate" );
+        Log.d("OnePxAct", "onCreate");
     }
 
     @Override

@@ -2,25 +2,41 @@ package cn.zdxiang.invoker.service;
 
 import android.app.Notification;
 import android.app.Service;
-import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
+
+import com.marswin89.marsdaemon.receiver.InvokerReceiver;
 
 import cn.zdxiang.invoker.InvokerEngine;
+import cn.zdxiang.invoker.manager.KeepLiveManager;
+import cn.zdxiang.invoker.observer.ScreenObserver;
+import cn.zdxiang.invoker.utils.AppUtils;
+import cn.zdxiang.invoker.utils.PackageUtils;
 
+/**
+ * @author jm
+ * @date 17-4-24.上午9:55
+ * @description The BaseBizService
+ */
 public abstract class BaseBizService extends Service {
-    protected static final int HASH_CODE = 1;
+
+    protected String TAG = BaseBizService.class.getName();
+
+    protected static final int SERVICE_ID = 1000;
 
     protected boolean mFirstStarted = true;
+
+    private ScreenObserver mScreenObserver;
 
     /**
      * 是否 任务完成, 不再需要服务运行?
      *
      * @return 应当停止服务, true; 应当启动服务, false; 无法判断, 什么也不做, null.
      */
-    public abstract Boolean shouldStopService(Intent intent, int flags, int startId);
+    public abstract boolean shouldStopService(Intent intent, int flags, int startId);
 
     public abstract void startWork(Intent intent, int flags, int startId);
 
@@ -37,6 +53,15 @@ public abstract class BaseBizService extends Service {
 
     public abstract void onServiceKilled(Intent rootIntent);
 
+
+    /**
+     * 用于在不需要服务运行的时候取消 Job / Alarm / Subscription.
+     */
+    public static void cancelJobAlarmSub(Context context) {
+        if (!InvokerEngine.sInitialized) return;
+        context.sendBroadcast(new Intent(InvokerReceiver.ACTION_CANCEL_JOB_ALARM_SUB));
+    }
+
     /**
      * 1.防止重复启动，可以任意调用startService(Intent i);
      * 2.利用漏洞启动前台服务而不显示通知;
@@ -46,50 +71,44 @@ public abstract class BaseBizService extends Service {
      */
     protected int onStart(Intent intent, int flags, int startId) {
 
-        //启动守护服务，运行在:watch子进程中
-        try {
-            startService(new Intent(getApplication(), WatchDogService.class));
-        } catch (Exception ignored) {
-        }
+        //Register the Screen observer
+        initScreenObserver();
+        WatchDogService.start(getApplication());
 
         //业务逻辑: 实际使用时，根据需求，将这里更改为自定义的条件，判定服务应当启动还是停止 (任务是否需要运行)
-        Boolean shouldStopService = shouldStopService(intent, flags, startId);
-//        if (shouldStopService != null) {
-//            if (shouldStopService) {
-//                stopService(intent, flags, startId);
-//            } else {
-//                startService(intent, flags, startId);
-//            }
-//        }
-        startService(intent, flags, startId);
+        boolean shouldStopService = shouldStopService(intent, flags, startId);
+        if (shouldStopService) {
+            stopService(intent, flags, startId);
+        } else {
+            startService(intent, flags, startId);
+        }
 
+        Log.d(TAG, "mFirstStarted=>" + mFirstStarted);
         if (mFirstStarted) {
             mFirstStarted = false;
-            //启动前台服务而不显示通知的漏洞已在 API Level 25 修复，大快人心！
+            //启动前台服务而不显示通知的漏洞已在 API Level 25 修复
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
                 //利用漏洞在 API Level 17 及以下的 Android 系统中，启动前台服务而不显示通知
-                startForeground(HASH_CODE, new Notification());
+                startForeground(SERVICE_ID, new Notification());
                 //利用漏洞在 API Level 18 及以上的 Android 系统中，启动前台服务而不显示通知
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
                     try {
-                        startService(new Intent(getApplication(), WorkNotificationService.class));
+                        startService(new Intent(this, WorkNotificationService.class));
                     } catch (Exception ignored) {
                     }
             }
-            getPackageManager().setComponentEnabledSetting(new ComponentName(getPackageName(), WatchDogService.class.getName()),
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+            PackageUtils.setComponentDefault(this, WatchDogService.class.getName());
         }
-
         return START_STICKY;
     }
 
     void startService(Intent intent, int flags, int startId) {
         //检查服务是否不需要运行
-        Boolean shouldStopService = shouldStopService(intent, flags, startId);
-        if (shouldStopService != null && shouldStopService) return;
+        boolean shouldStopService = shouldStopService(intent, flags, startId);
+        if (shouldStopService) return;
         //若还没有取消订阅，说明任务仍在运行，为防止重复启动，直接 return
-        Boolean workRunning = isWorkRunning(intent, flags, startId);
-        if (workRunning != null && workRunning) return;
+        boolean workRunning = isWorkRunning(intent, flags, startId);
+        if (workRunning) return;
         //业务逻辑
         startWork(intent, flags, startId);
     }
@@ -102,12 +121,13 @@ public abstract class BaseBizService extends Service {
      * 2.我们希望 BaseBizService 起到一个类似于控制台的角色，即 BaseBizService 始终运行 (无论任务是否需要运行)，
      * 而是通过 onStart() 里自定义的条件，来决定服务是否应当启动或停止。
      */
-//    void stopService(Intent intent, int flags, int startId) {
-//        //取消对任务的订阅
-//        stopWork(intent, flags, startId);
-//        //取消 Job / Alarm / Subscription
-////        cancelJobAlarmSub();
-//    }
+    void stopService(Intent intent, int flags, int startId) {
+        //取消对任务的订阅
+        stopWork(intent, flags, startId);
+        //取消 Job / Alarm / Subscription
+        cancelJobAlarmSub(this);
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return onStart(intent, flags, startId);
@@ -123,11 +143,11 @@ public abstract class BaseBizService extends Service {
         onServiceKilled(rootIntent);
         if (!InvokerEngine.sInitialized) return;
         try {
-            startService(new Intent(InvokerEngine.sApp, InvokerEngine.sServiceClass));
+            startService(new Intent(this, InvokerEngine.sServiceClass));
         } catch (Exception ignored) {
         }
         try {
-            startService(new Intent(InvokerEngine.sApp, WatchDogService.class));
+            WatchDogService.start(this);
         } catch (Exception ignored) {
         }
     }
@@ -146,6 +166,28 @@ public abstract class BaseBizService extends Service {
     @Override
     public void onDestroy() {
         onEnd(null);
+        if (mScreenObserver != null) {
+            mScreenObserver.stopScreenStateUpdate();
+        }
+    }
+
+    private void initScreenObserver() {
+        mScreenObserver = new ScreenObserver(this);
+        mScreenObserver.requestScreenStateUpdate(new ScreenObserver.ScreenStateListener() {
+            @Override
+            public void onScreenOn() {
+                Log.d(TAG, "onScreenOn");
+                KeepLiveManager.getInstance().finishOnePxAct();
+            }
+
+            @Override
+            public void onScreenOff() {
+                Log.d(TAG, "onScreenOff");
+                if (!AppUtils.isForeground(BaseBizService.this, getPackageName())) {
+                    KeepLiveManager.getInstance().startOnePxAct(BaseBizService.this);
+                }
+            }
+        });
     }
 
     public static class WorkNotificationService extends Service {
@@ -155,7 +197,7 @@ public abstract class BaseBizService extends Service {
          */
         @Override
         public int onStartCommand(Intent intent, int flags, int startId) {
-            startForeground(BaseBizService.HASH_CODE, new Notification());
+            startForeground(BaseBizService.SERVICE_ID, new Notification());
             stopSelf();
             return START_STICKY;
         }

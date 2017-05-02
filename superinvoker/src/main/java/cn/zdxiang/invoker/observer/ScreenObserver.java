@@ -1,4 +1,4 @@
-package com.marswin89.marsdaemon.observer;
+package cn.zdxiang.invoker.observer;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;

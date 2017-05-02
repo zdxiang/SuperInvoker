@@ -19,7 +19,7 @@ public class JobSchedulerService extends JobService {
     public boolean onStartJob(JobParameters params) {
         if (!InvokerEngine.sInitialized) return false;
         try {
-            startService(new Intent(InvokerEngine.sApp, InvokerEngine.sServiceClass));
+            startService(new Intent(this, InvokerEngine.sServiceClass));
         } catch (Exception ignored) {
         }
         jobFinished(params, false);

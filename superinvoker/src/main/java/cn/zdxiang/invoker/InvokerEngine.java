@@ -1,7 +1,5 @@
 package cn.zdxiang.invoker;
 
-import android.content.Context;
-
 import cn.zdxiang.invoker.service.BaseBizService;
 
 /**
@@ -11,8 +9,6 @@ import cn.zdxiang.invoker.service.BaseBizService;
  */
 
 public class InvokerEngine {
-    public static Context sApp;
-
     private InvokerEngine() {}
 
     public static final int DEFAULT_WAKE_UP_INTERVAL = 6 * 60 * 1000;
@@ -26,11 +22,9 @@ public class InvokerEngine {
     public static boolean sInitialized;
 
     /**
-     * @param app            Application Context.
      * @param wakeUpInterval 定时唤醒的时间间隔(ms).
      */
-    public static void initialize(Context app, Class<? extends BaseBizService> serviceClass, Integer wakeUpInterval) {
-        sApp = app;
+    public static void initialize(Class<? extends BaseBizService> serviceClass, Integer wakeUpInterval) {
         sServiceClass = serviceClass;
         if (wakeUpInterval != null) sWakeUpInterval = wakeUpInterval;
         sInitialized = true;

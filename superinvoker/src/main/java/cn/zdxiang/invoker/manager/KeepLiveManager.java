@@ -1,20 +1,16 @@
 package cn.zdxiang.invoker.manager;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
-import cn.zdxiang.invoker.OnePxAct;
-import cn.zdxiang.invoker.service.InvokerService;
-
 import java.lang.ref.WeakReference;
+
+import cn.zdxiang.invoker.OnePxAct;
 
 
 /**
@@ -72,27 +68,6 @@ public class KeepLiveManager {
             if (activity != null && !activity.isFinishing()) {
                 activity.finish();
                 Log.d(TAG, "关闭Activity");
-            }
-        }
-    }
-
-    /**
-     * setForegroundService
-     *
-     * @param keepLiveService The service which to keep
-     * @param innerService    innerService
-     */
-    public void setForegroundService(final Service keepLiveService, final Service innerService) {
-        Log.d(TAG, "setForegroundService: KeepLiveService->setForegroundService: " + keepLiveService + ", innerService:" + innerService);
-        if (keepLiveService != null) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                keepLiveService.startForeground(InvokerService.SERVICE_ID, new Notification());
-            } else {
-                keepLiveService.startForeground(InvokerService.SERVICE_ID, new Notification());
-                if (innerService != null) {
-                    innerService.startForeground(InvokerService.SERVICE_ID, new Notification());
-                    innerService.stopSelf();
-                }
             }
         }
     }

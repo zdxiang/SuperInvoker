@@ -72,15 +72,6 @@
 
         </receiver>
 
-        <receiver
-            android:name="com.marswin89.marsdaemon.receiver.BootReceiver"
-            android:process=":invokerservice"
-            >
-            <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.REBOOT"/>
-            </intent-filter>
-        </receiver>
 
         <receiver
             android:name="com.marswin89.marsdaemon.receiver.InvokerReceiver"
@@ -89,10 +80,9 @@
             android:process=":invokerservice">
 
             <intent-filter android:priority="1000">
-                <action android:name="com.wake.gray"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.REBOOT"/>
             </intent-filter>
-
-            <!--google-->
 
             <intent-filter>
                 <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED"/>
@@ -116,6 +106,19 @@
                 <action android:name="android.content.syncmanager.SYNC_ALARM"/>
             </intent-filter>
 
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_MOUNTED"/>
+                <action android:name="android.intent.action.MEDIA_EJECT"/>
+                <action android:name="android.intent.action.MEDIA_UNMOUNTED"/>
+                <action android:name="android.intent.action.MEDIA_SHARED"/>
+                <action android:name="android.intent.action.MEDIA_SCANNER_STARTED"/>
+                <action android:name="android.intent.action.MEDIA_SCANNER_FINISHED"/>
+                <action android:name="android.intent.action.MEDIA_REMOVED"/>
+                <action android:name="android.intent.action.MEDIA_BAD_REMOVAL"/>
+
+                <data android:scheme="file"/>
+            </intent-filter>
+
 
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -136,8 +139,8 @@
                 <action android:name="android.intent.action.TIME_SET"/>
 
             </intent-filter>
-            <!--xiaomi-->
 
+            <!--====================================================xiaomi- start================================================================-->
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE"/>
             </intent-filter>
@@ -151,13 +154,12 @@
             <intent-filter>
                 <action android:name="com.xiaomi.push.PING_TIMER"/>
             </intent-filter>
+            <!--====================================================xiaomi- end================================================================-->
 
-            <!--baidu-->
-
+            <!--====================================================BAIDU- start================================================================-->
             <intent-filter>
                 <action android:name="baidu.intent.action.account.SHARE_SERVICE"/>
             </intent-filter>
-
 
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
@@ -182,6 +184,8 @@
             <intent-filter>
                 <action android:name="com.baidu.android.pushservice.action.PUSH_SERVICE"/>
             </intent-filter>
+
+            <!--====================================================BAIDU- end================================================================-->
 
             <!--Install -->
             <intent-filter>
@@ -227,7 +231,6 @@
 
             <intent-filter>
                 <action android:name="com.lbe.security.sync.syncmanager.SYNC_ALARM"/>
-
             </intent-filter>
 
 
@@ -266,63 +269,42 @@
             </intent-filter>
 
             <!--===============================================tencent end===============================-->
+
+
+            <!--JPUSH-->
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTER"/>
+                <action android:name="cn.jpush.android.intent.REPORT"/>
+                <action android:name="cn.jpush.android.intent.PushService"/>
+                <action android:name="cn.jpush.android.intent.PUSH_TIME"/>
+            </intent-filter>
+
+            <intent-filter android:priority="1000">
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>   <!--Required  显示通知栏 -->
+                <category android:name="com.mm.invoker"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+            <!-- Optional -->
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+
+                <data android:scheme="package"/>
+            </intent-filter>
         </receiver>
 
 
-        <!--<receiver android:name=".receiver.MountReceiver">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.MEDIA_MOUNTED"/>-->
-        <!--<action android:name="android.intent.action.MEDIA_EJECT"/>-->
-        <!--<action android:name="android.intent.action.MEDIA_UNMOUNTED"/>-->
-        <!--<action android:name="android.intent.action.MEDIA_SHARED"/>-->
-        <!--<action android:name="android.intent.action.MEDIA_SCANNER_STARTED"/>-->
-        <!--<action android:name="android.intent.action.MEDIA_SCANNER_FINISHED"/>-->
-        <!--<action android:name="android.intent.action.MEDIA_REMOVED"/>-->
-        <!--<action android:name="android.intent.action.MEDIA_BAD_REMOVAL"/>-->
-
-        <!--<data android:scheme="file"/>-->
-        <!--</intent-filter>-->
-
-
-        <!--&lt;!&ndash;JPUSH&ndash;&gt;-->
-        <!--<intent-filter>-->
-        <!--<action android:name="cn.jpush.android.intent.REGISTER"/>-->
-        <!--<action android:name="cn.jpush.android.intent.REPORT"/>-->
-        <!--<action android:name="cn.jpush.android.intent.PushService"/>-->
-        <!--<action android:name="cn.jpush.android.intent.PUSH_TIME"/>-->
-        <!--</intent-filter>-->
-
-        <!--<intent-filter android:priority="1000">-->
-        <!--<action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>   &lt;!&ndash;Required  显示通知栏 &ndash;&gt;-->
-        <!--<category android:name="com.mm.invoker"/>-->
-        <!--</intent-filter>-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.USER_PRESENT"/>-->
-        <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>-->
-        <!--</intent-filter>-->
-        <!--&lt;!&ndash; Optional &ndash;&gt;-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.PACKAGE_ADDED"/>-->
-        <!--<action android:name="android.intent.action.PACKAGE_REMOVED"/>-->
-
-        <!--<data android:scheme="package"/>-->
-        <!--</intent-filter>-->
-
-        <!--</receiver>-->
-
-
         <service
-            android:name="cn.zdxiang.invoker.service.InvokerService"
+            android:name=".service.InvokerService"
             android:process=":invokerservice">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </service>
 
-        <service
-            android:name="cn.zdxiang.invoker.service.InvokerService$InnerService"
-            android:process=":invokerservice"
-            />
 
         <receiver
             android:name="com.marswin89.marsdaemon.receiver.EmptyReceiver"
@@ -334,19 +316,19 @@
             android:name="com.marswin89.marsdaemon.receiver.EmptyReceiver2"
             android:process=":core"/>
 
-        <service android:name="cn.zdxiang.invoker.service.BaseBizService$WorkNotificationService" />
+        <service android:name="cn.zdxiang.invoker.service.BaseBizService$WorkNotificationService"/>
         <service
             android:name="cn.zdxiang.invoker.service.JobSchedulerService"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE"
-            android:process=":watch" />
+            android:process=":watch"/>
         <service
             android:name="cn.zdxiang.invoker.service.WatchDogService"
-            android:process=":watch" />
+            android:process=":watch"/>
         <service
             android:name="cn.zdxiang.invoker.service.WatchDogService$WatchDogNotificationService"
-            android:process=":watch" />
+            android:process=":watch"/>
     </application>
 
 </manifest>

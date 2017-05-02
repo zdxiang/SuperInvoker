@@ -3,22 +3,23 @@ package com.marswin89.marsdaemon;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.marswin89.marsdaemon.receiver.EmptyReceiver;
 import com.marswin89.marsdaemon.receiver.EmptyReceiver2;
-import cn.zdxiang.invoker.service.CoreService;
-import cn.zdxiang.invoker.service.InvokerService;
 
-import cn.zdxiang.invoker.InvokerEngine;
+import cn.zdxiang.invoker.service.CoreService;
 
 /**
+ * Make sure that your Application extends DaemonApplication and override the abstract methods
+ *
  * @author jm
  * @date 17-4-27.上午10:19
  * @description DaemonApplication
  */
 
 public abstract class DaemonApplication extends Application {
+    protected String TAG = DaemonApplication.class.getName();
+
     private DaemonClient mDaemonClient;
 
     @Override
@@ -29,34 +30,39 @@ public abstract class DaemonApplication extends Application {
             boolean b = mDaemonClient.onAttachBaseContext(base);
             if (!b) {
 //                Toast.makeText(base, "守护失败", Toast.LENGTH_SHORT).show();
-                InvokerEngine.initialize(this,InvokerService.class,InvokerEngine.DEFAULT_WAKE_UP_INTERVAL);
-                InvokerService.start(base);
+                startYourService();
             } else {
-                Log.d("DaemonApplication", "守护成功");
-                InvokerService.start(base);
+                Log.d(TAG, "native daemon success");
+                startYourService();
             }
         } else {
             mDaemonClient.setDaemonPermiiting(base, false);
-            Log.d("DaemonApplication", "这个设备不允许daemon");
-            InvokerEngine.initialize(this,InvokerService.class,InvokerEngine.DEFAULT_WAKE_UP_INTERVAL);
-            InvokerService.start(base);
+            Log.d(TAG, "native daemon failed");
+            startYourService();
         }
     }
+
+    /**
+     * Start your service that extends {@link cn.zdxiang.invoker.service.BaseBizService}
+     */
+    protected abstract void startYourService();
 
     /**
      * e.g cn.zdxiang.superinvoker:invokerservice
      *
      * @return The business process name;
      */
-    protected abstract String getWorkProcessName();
+    protected abstract String getYourProcessName();
 
     /**
-     * e.g cn.zdxiang.superinvoker:invokerservice
-     *
      * @return The empty process name;
      */
     protected abstract String getCoreProcessName();
 
+    /**
+     * @return Your service that extends {@link cn.zdxiang.invoker.service.BaseBizService}
+     */
+    protected abstract String getYourServiceCanonicalName();
 
     /**
      * Daemon SDK needs the Daemon Configurations contains two process informations</br>
@@ -66,8 +72,8 @@ public abstract class DaemonApplication extends Application {
      */
     private DaemonConfigurations createDaemonConfigurations() {
         DaemonConfigurations.DaemonConfiguration configuration1 = new DaemonConfigurations.DaemonConfiguration(
-                getWorkProcessName(),
-                InvokerService.class.getCanonicalName(),
+                getYourProcessName(),
+                getYourServiceCanonicalName(),
                 EmptyReceiver.class.getCanonicalName());
 
         DaemonConfigurations.DaemonConfiguration configuration2 = new DaemonConfigurations.DaemonConfiguration(
@@ -83,18 +89,17 @@ public abstract class DaemonApplication extends Application {
     private class MyDaemonListener implements DaemonConfigurations.DaemonListener {
         @Override
         public void onPersistentStart(Context context) {
-            Log.d("fuck", "onPersistentStart");
+            Log.d(TAG, "onPersistentStart");
         }
 
         @Override
         public void onDaemonAssistantStart(Context context) {
-            Log.d("fuck", "onDaemonAssistantStart");
+            Log.d(TAG, "onDaemonAssistantStart");
         }
 
         @Override
         public void onWatchDaemonDaed() {
-            Log.d("fuck", "onWatchDaemonDaed");
-
+            Log.d(TAG, "onWatchDaemonDaed");
         }
     }
 }

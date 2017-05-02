@@ -7,39 +7,75 @@ import android.app.Service;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-
-import com.marswin89.marsdaemon.utils.PackageUtils;
+import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
 
 import cn.zdxiang.invoker.InvokerEngine;
+import cn.zdxiang.invoker.utils.PackageUtils;
 import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
 
+
+/**
+ * @author jm
+ * @date 17-4-27.上午10:19
+ * @description DaemonApplication
+ */
+
 public class WatchDogService extends Service {
 
-    protected static final int HASH_CODE = 2;
+    protected static final int SERVICE_ID = 1001;
 
     protected static Subscription sSubscription;
 
     protected static PendingIntent sPendingIntent;
 
+    public static void start(Context context) {
+        try {
+            Intent intent = new Intent(context, WatchDogService.class);
+            context.startService(intent);
+        } catch (Exception ignored) {
+
+        }
+    }
+
+    /**
+     * 用于在不需要服务运行的时候取消 Job / Alarm / Subscription.
+     * <p>
+     * 因 WatchDogService 运行在 :watch 子进程, 请勿在主进程中直接调用此方法.
+     * 而是向 InvokerReceiver 发送一个 Action 为 InvokerReceiver.ACTION_CANCEL_JOB_ALARM_SUB 的广播.
+     */
+    public static void cancelJobAlarmSub(Context context) {
+        if (!InvokerEngine.sInitialized) return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            JobScheduler scheduler = (JobScheduler) context.getSystemService(JOB_SCHEDULER_SERVICE);
+            scheduler.cancel(SERVICE_ID);
+        } else {
+            AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+            if (sPendingIntent != null) am.cancel(sPendingIntent);
+        }
+        if (sSubscription != null) sSubscription.unsubscribe();
+    }
+
+
     /**
      * 守护服务，运行在:watch子进程中
      */
     protected final int onStart(Intent intent, int flags, int startId) {
-
         if (!InvokerEngine.sInitialized) return START_STICKY;
+        if (sSubscription != null && !sSubscription.isUnsubscribed()) return START_STICKY;
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
-            startForeground(HASH_CODE, new Notification());
+            startForeground(SERVICE_ID, new Notification());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
                 try {
-                    startService(new Intent(InvokerEngine.sApp, WatchDogNotificationService.class));
+                    startService(new Intent(this, WatchDogNotificationService.class));
                 } catch (Exception ignored) {
                 }
         }
@@ -47,7 +83,7 @@ public class WatchDogService extends Service {
         //定时检查 BaseBizService 是否在运行，如果不在运行就把它拉起来
         //Android 5.0+ 使用 JobScheduler，效果比 AlarmManager 好
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            JobInfo.Builder builder = new JobInfo.Builder(HASH_CODE, new ComponentName(InvokerEngine.sApp, JobSchedulerService.class));
+            JobInfo.Builder builder = new JobInfo.Builder(SERVICE_ID, new ComponentName(this, JobSchedulerService.class));
             builder.setPeriodic(InvokerEngine.getWakeUpInterval());
             //Android 7.0+ 增加了一项针对 JobScheduler 的新限制，最小间隔只能是下面设定的数字
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) builder.setPeriodic(JobInfo.getMinPeriodMillis(), JobInfo.getMinFlexMillis());
@@ -57,15 +93,17 @@ public class WatchDogService extends Service {
         } else {
             //Android 4.4- 使用 AlarmManager
             AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-            Intent i = new Intent(InvokerEngine.sApp, InvokerEngine.sServiceClass);
-            sPendingIntent = PendingIntent.getService(InvokerEngine.sApp, HASH_CODE, i, PendingIntent.FLAG_UPDATE_CURRENT);
+            Intent i = new Intent(this, InvokerEngine.sServiceClass);
+            sPendingIntent = PendingIntent.getService(this, SERVICE_ID, i, PendingIntent.FLAG_UPDATE_CURRENT);
             am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + InvokerEngine.getWakeUpInterval(), InvokerEngine.getWakeUpInterval(), sPendingIntent);
         }
 
         //使用定时 Observable，避免 Android 定制系统 JobScheduler / AlarmManager 唤醒间隔不稳定的情况
         sSubscription = Observable.interval(InvokerEngine.getWakeUpInterval(), TimeUnit.MILLISECONDS)
                 .subscribe(new Action1<Long>() {
-                    public void call(Long aLong) {startService(new Intent(InvokerEngine.sApp, InvokerEngine.sServiceClass));}
+                    public void call(Long aLong) {
+                        startService(new Intent(WatchDogService.this, InvokerEngine.sServiceClass));
+                    }
                 }, new Action1<Throwable>() {
                     public void call(Throwable t) {t.printStackTrace();}
                 });
@@ -88,11 +126,11 @@ public class WatchDogService extends Service {
     protected void onEnd(Intent rootIntent) {
         if (!InvokerEngine.sInitialized) return;
         try {
-            startService(new Intent(InvokerEngine.sApp, InvokerEngine.sServiceClass));
+            startService(new Intent(this, InvokerEngine.sServiceClass));
         } catch (Exception ignored) {
         }
         try {
-            startService(new Intent(InvokerEngine.sApp, WatchDogService.class));
+            startService(new Intent(this, WatchDogService.class));
         } catch (Exception ignored) {
         }
     }
@@ -115,14 +153,9 @@ public class WatchDogService extends Service {
 
 
     public static class WatchDogNotificationService extends Service {
-
-        /**
-         * 利用漏洞在 API Level 18 及以上的 Android 系统中，启动前台服务而不显示通知
-         * 运行在:watch子进程中
-         */
         @Override
         public int onStartCommand(Intent intent, int flags, int startId) {
-            startForeground(WatchDogService.HASH_CODE, new Notification());
+            startForeground(WatchDogService.SERVICE_ID, new Notification());
             stopSelf();
             return START_STICKY;
         }

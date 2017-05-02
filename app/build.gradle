@@ -6,10 +6,20 @@ android {
 
     defaultConfig {
         applicationId "cn.zdxiang.superinvoker"
-        minSdkVersion 16
-        targetSdkVersion 22
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
+    }
+
+
+    signingConfigs {
+        debug {
+            keyAlias 'fuckyou'
+            keyPassword '369369'
+            storeFile file('/home/jm/works/zdxiang.keystore')
+            storePassword '369369'
+        }
     }
 
 
@@ -18,10 +28,16 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            signingConfig signingConfigs.debug
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
     sourceSets {
         main {
-            jniLibs.srcDirs =['libs']
+            jniLibs.srcDirs = ['libs']
         }
     }
 }
@@ -29,3 +45,5 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':superinvoker')
 }
+
+

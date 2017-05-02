@@ -1,6 +1,11 @@
 package cn.zdxiang.superinvoker.application;
 
+import android.util.Log;
+
 import com.marswin89.marsdaemon.DaemonApplication;
+
+import cn.zdxiang.invoker.InvokerEngine;
+import cn.zdxiang.superinvoker.service.InvokerService;
 
 
 /**
@@ -13,16 +18,28 @@ public class MyApplication extends DaemonApplication {
 
     @Override
     public void onCreate() {
+        Log.d("FUCKFFF", "MyApplication onCreate");
         super.onCreate();
     }
 
     @Override
-    protected String getWorkProcessName() {
+    protected void startYourService() {
+        InvokerEngine.initialize(InvokerService.class, InvokerEngine.DEFAULT_WAKE_UP_INTERVAL);
+        InvokerService.start(this);
+    }
+
+    @Override
+    protected String getYourProcessName() {
         return "cn.zdxiang.superinvoker:invokerservice";
     }
 
     @Override
     protected String getCoreProcessName() {
         return "cn.zdxiang.superinvoker:core";
+    }
+
+    @Override
+    protected String getYourServiceCanonicalName() {
+        return InvokerService.class.getCanonicalName();
     }
 }

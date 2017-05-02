@@ -1,4 +1,4 @@
-package com.marswin89.marsdaemon.utils;
+package cn.zdxiang.invoker.utils;
 
 import android.app.ActivityManager;
 import android.content.ComponentName;
