@@ -76,8 +76,8 @@ public abstract class BaseBizService extends Service {
         WatchDogService.start(getApplication());
 
         //业务逻辑: 实际使用时，根据需求，将这里更改为自定义的条件，判定服务应当启动还是停止 (任务是否需要运行)
-        boolean shouldStopService = shouldStopService(intent, flags, startId);
-        if (shouldStopService) {
+        Boolean shouldStopService = shouldStopService(intent, flags, startId);
+        if (shouldStopService != null && shouldStopService) {
             stopService(intent, flags, startId);
         } else {
             startService(intent, flags, startId);
