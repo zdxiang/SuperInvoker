@@ -3,7 +3,11 @@ package cn.zdxiang.superinvoker;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.Log;
 import android.widget.Button;
+
+import cn.zdxiang.invoker.manager.IntentWrapper;
+import cn.zdxiang.invoker.utils.IntentWrapperUtils;
 
 /**
  * @author jm
@@ -14,16 +18,14 @@ import android.widget.Button;
 public class MainActivity extends Activity {
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        Button button = new Button(this);
+        setContentView(R.layout.activity_main);
 
-        button.setText("test");
-        button.setTextSize(22);
-
-        setContentView(button);
+        Log.d("fuckyou", "whiteListMatters");
+        if (!IntentWrapperUtils.isIntentWrapperSet(this)) {
+            IntentWrapper.whiteListMatters(this, this, "为保证功能稳定运行");
+        }
     }
-
-
 }

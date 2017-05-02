@@ -40,7 +40,6 @@
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard">
 
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -281,7 +280,7 @@
 
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>   <!--Required  显示通知栏 -->
-                <category android:name="com.mm.invoker"/>
+                <category android:name="cn.zdxiang.superinvoker"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT"/>

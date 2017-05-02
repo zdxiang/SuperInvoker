@@ -36,7 +36,7 @@ public abstract class BaseBizService extends Service {
      *
      * @return 应当停止服务, true; 应当启动服务, false; 无法判断, 什么也不做, null.
      */
-    public abstract boolean shouldStopService(Intent intent, int flags, int startId);
+    public abstract Boolean shouldStopService(Intent intent, int flags, int startId);
 
     public abstract void startWork(Intent intent, int flags, int startId);
 
@@ -83,7 +83,6 @@ public abstract class BaseBizService extends Service {
             startService(intent, flags, startId);
         }
 
-        Log.d(TAG, "mFirstStarted=>" + mFirstStarted);
         if (mFirstStarted) {
             mFirstStarted = false;
             //启动前台服务而不显示通知的漏洞已在 API Level 25 修复
@@ -104,11 +103,11 @@ public abstract class BaseBizService extends Service {
 
     void startService(Intent intent, int flags, int startId) {
         //检查服务是否不需要运行
-        boolean shouldStopService = shouldStopService(intent, flags, startId);
-        if (shouldStopService) return;
+        Boolean shouldStopService = shouldStopService(intent, flags, startId);
+        if (shouldStopService != null && shouldStopService) return;
         //若还没有取消订阅，说明任务仍在运行，为防止重复启动，直接 return
-        boolean workRunning = isWorkRunning(intent, flags, startId);
-        if (workRunning) return;
+        Boolean workRunning = isWorkRunning(intent, flags, startId);
+        if (workRunning != null && workRunning) return;
         //业务逻辑
         startWork(intent, flags, startId);
     }

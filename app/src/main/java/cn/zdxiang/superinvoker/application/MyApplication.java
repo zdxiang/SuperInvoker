@@ -18,7 +18,7 @@ public class MyApplication extends DaemonApplication {
 
     @Override
     public void onCreate() {
-        Log.d("FUCKFFF", "MyApplication onCreate");
+        Log.d("MyApplication", "MyApplication onCreate");
         super.onCreate();
     }
 

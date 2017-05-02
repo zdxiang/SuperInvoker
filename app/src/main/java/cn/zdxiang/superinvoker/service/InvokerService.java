@@ -42,7 +42,7 @@ public class InvokerService extends BaseBizService {
 
 
     @Override
-    public boolean shouldStopService(Intent intent, int flags, int startId) {
+    public Boolean shouldStopService(Intent intent, int flags, int startId) {
         return false;
     }
 
