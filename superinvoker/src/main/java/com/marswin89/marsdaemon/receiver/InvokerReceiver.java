@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import cn.zdxiang.invoker.InvokerEngine;
 import cn.zdxiang.invoker.manager.KeepLiveManager;
@@ -17,11 +16,12 @@ import cn.zdxiang.invoker.manager.KeepLiveManager;
  */
 
 public class InvokerReceiver extends BroadcastReceiver {
+
     public static final String TAG = InvokerReceiver.class.getSimpleName();
 
     /**
-     * WECHAT open action.
-     * Will receive after open WECHAT(Ps.the WeChat status must be stopped)
+     * WECHAT open refresh action.
+     * Will receive after open WECHAT(Ps.Not any time when open the WeChat)
      */
     public static final String ACTION_TENCENT_REFRESH_WXAPP = "com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP";
 
@@ -35,25 +35,23 @@ public class InvokerReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         Log.d(TAG, "onReceive: InvokerReceiver receive action =" + action);
-        Toast.makeText(context, "收到广播=>" + action, Toast.LENGTH_LONG).show();
         if (!InvokerEngine.sInitialized) return;
         try {
             context.startService(new Intent(context, InvokerEngine.sServiceClass));
         } catch (Exception ignored) {
+
         }
+
 
         switch (action) {
 
             case Intent.ACTION_USER_PRESENT:
-                Log.d(TAG, "screen unlocked,finish onePxAct");
-                KeepLiveManager.getInstance().finishOnePxAct();
+                KeepLiveManager.getInstance().finishKeepLiveActivity();
                 break;
 
 //            case ACTION_TENCENT_REFRESH_WXAPP:
 //                InvokerService.start(context);
 //                break;
-
-
         }
     }
 }

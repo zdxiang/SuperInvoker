@@ -4,27 +4,20 @@
 
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
     <uses-permission android:name="android.permission.BIND_SCREENING_SERVICE"/>
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
-
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
     <uses-permission android:name="android.permission.READ_LOGS"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BATTERY_STATS"/>
-
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
-
     <uses-permission android:name="android.permission.VIBRATE"/>
-
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
 
@@ -32,7 +25,7 @@
         android:name=".application.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="BBBBBB"
+        android:label="AAAAAAAAAAAAAAAAAAA"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
@@ -51,18 +44,16 @@
 
 
         <activity
-            android:name="cn.zdxiang.invoker.OnePxAct"
+            android:name="cn.zdxiang.invoker.KeepLiveActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard"
-            android:excludeFromRecents="true"
-            android:finishOnTaskLaunch="false"
             android:launchMode="singleTop"
-            android:process=":invokerservice"
+            android:process=":secure"
             android:theme="@style/TranslucentTheme"/>
 
 
         <receiver
             android:name="com.marswin89.marsdaemon.receiver.ShutDownReceiver"
-            android:process=":invokerservice">
+            android:process=":secure">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.ACTION_SHUTDOWN"/>
 
@@ -76,7 +67,7 @@
             android:name="com.marswin89.marsdaemon.receiver.InvokerReceiver"
             android:enabled="true"
             android:exported="true"
-            android:process=":invokerservice">
+            android:process=":secure">
 
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -122,7 +113,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
 
-                <!-- 解锁完成后会调用 -->
                 <action android:name="android.intent.action.USER_PRESENT"/>
 
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
@@ -164,7 +154,6 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
                 <action android:name="com.baidu.android.pushservice.action.notification.SHOW"/>
                 <action android:name="com.baidu.android.pushservice.action.media.CLICK"/>
-                <!-- 以下四项为可选的action声明，可大大提高service存活率和消息到达速度 -->
                 <action android:name="android.intent.action.MEDIA_MOUNTED"/>
                 <action android:name="android.intent.action.USER_PRESENT"/>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
@@ -297,8 +286,8 @@
 
 
         <service
-            android:name=".service.InvokerService"
-            android:process=":invokerservice">
+            android:name=".service.WorkingService"
+            android:process=":secure">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
@@ -307,7 +296,7 @@
 
         <receiver
             android:name="com.marswin89.marsdaemon.receiver.EmptyReceiver"
-            android:process=":invokerservice"/>
+            android:process=":secure"/>
         <service
             android:name="cn.zdxiang.invoker.service.CoreService"
             android:process=":core"/>
@@ -321,13 +310,13 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE"
-            android:process=":watch"/>
+            android:process=":core"/>
         <service
             android:name="cn.zdxiang.invoker.service.WatchDogService"
-            android:process=":watch"/>
+            android:process=":core"/>
         <service
             android:name="cn.zdxiang.invoker.service.WatchDogService$WatchDogNotificationService"
-            android:process=":watch"/>
+            android:process=":core"/>
     </application>
 
 </manifest>

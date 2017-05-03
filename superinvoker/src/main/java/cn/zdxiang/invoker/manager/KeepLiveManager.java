@@ -1,16 +1,16 @@
 package cn.zdxiang.invoker.manager;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
 import java.lang.ref.WeakReference;
 
-import cn.zdxiang.invoker.OnePxAct;
+import cn.zdxiang.invoker.KeepLiveActivity;
 
 
 /**
@@ -24,7 +24,7 @@ public class KeepLiveManager {
 
     private static KeepLiveManager sInstance = new KeepLiveManager();
 
-    private WeakReference<OnePxAct> mWeakActivityRef = null;
+    private WeakReference<KeepLiveActivity> mWeakActivityRef = null;
 
     private KeepLiveManager() {
 
@@ -34,7 +34,8 @@ public class KeepLiveManager {
         return sInstance;
     }
 
-    public void initOnePx(OnePxAct mainActivity) {
+    @SuppressLint("RtlHardcoded")
+    public void initKeepLiveActivity(KeepLiveActivity mainActivity) {
         this.mWeakActivityRef = new WeakReference<>(mainActivity);
         Window window = mainActivity.getWindow();
         window.setGravity(Gravity.LEFT | Gravity.TOP);
@@ -48,26 +49,24 @@ public class KeepLiveManager {
 
 
     /**
-     * 启动一像素Activity
+     * Start the keep live activity
      *
      * @param context context
      */
-    public void startOnePxAct(Context context) {
-        Intent intent = new Intent(context, OnePxAct.class);
+    public void startKeepLive(Context context) {
+        Intent intent = new Intent(context, KeepLiveActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
-        Log.d(TAG, "onScreenOn=打开activity");
     }
 
     /**
-     * 结束一像素Activity
+     * Finish the keep live activity
      */
-    public void finishOnePxAct() {
+    public void finishKeepLiveActivity() {
         if (mWeakActivityRef != null) {
             Activity activity = mWeakActivityRef.get();
             if (activity != null && !activity.isFinishing()) {
                 activity.finish();
-                Log.d(TAG, "关闭Activity");
             }
         }
     }

@@ -49,12 +49,15 @@ public abstract class DaemonApplication extends Application {
 
     /**
      * e.g cn.zdxiang.superinvoker:invokerservice
+     * P.S,can not uses getPackageName();
      *
      * @return The business process name;
      */
     protected abstract String getYourProcessName();
 
     /**
+     * P.S,can not uses getPackageName();
+     *
      * @return The empty process name;
      */
     protected abstract String getCoreProcessName();

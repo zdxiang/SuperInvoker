@@ -176,14 +176,14 @@ public abstract class BaseBizService extends Service {
             @Override
             public void onScreenOn() {
                 Log.d(TAG, "onScreenOn");
-                KeepLiveManager.getInstance().finishOnePxAct();
+                KeepLiveManager.getInstance().finishKeepLiveActivity();
             }
 
             @Override
             public void onScreenOff() {
                 Log.d(TAG, "onScreenOff");
                 if (!AppUtils.isForeground(BaseBizService.this, getPackageName())) {
-                    KeepLiveManager.getInstance().startOnePxAct(BaseBizService.this);
+                    KeepLiveManager.getInstance().startKeepLive(BaseBizService.this);
                 }
             }
         });

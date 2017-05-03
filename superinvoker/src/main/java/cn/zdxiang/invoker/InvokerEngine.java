@@ -5,7 +5,7 @@ import cn.zdxiang.invoker.service.BaseBizService;
 /**
  * @author jm
  * @date 17-4-28.下午2:32
- * @description
+ * @description InvokerEngine
  */
 
 public class InvokerEngine {
@@ -22,6 +22,9 @@ public class InvokerEngine {
     public static boolean sInitialized;
 
     /**
+     * Init invokerEngin
+     *
+     * @param serviceClass   The service that extends BaseBizService
      * @param wakeUpInterval 定时唤醒的时间间隔(ms).
      */
     public static void initialize(Class<? extends BaseBizService> serviceClass, Integer wakeUpInterval) {

@@ -12,13 +12,13 @@ import cn.zdxiang.invoker.manager.KeepLiveManager;
 /**
  * @author jm
  * @date 17-4-18.下午6:01
- * @description
+ * @description Start this when screen off and destroy when screen on
  */
 
-public class OnePxAct extends Activity {
+public class KeepLiveActivity extends Activity {
 
     public static void start(Context context) {
-        Intent intent = new Intent(context, OnePxAct.class);
+        Intent intent = new Intent(context, KeepLiveActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
 
@@ -27,14 +27,12 @@ public class OnePxAct extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        KeepLiveManager.getInstance().initOnePx(this);
-        Log.d("OnePxAct", "onCreate");
+        KeepLiveManager.getInstance().initKeepLiveActivity(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        KeepLiveManager.getInstance().finishOnePxAct();
-        Log.d("OnePxAct", "onDestroy");
+        KeepLiveManager.getInstance().finishKeepLiveActivity();
     }
 }

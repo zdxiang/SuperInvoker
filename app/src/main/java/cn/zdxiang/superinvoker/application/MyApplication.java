@@ -1,11 +1,9 @@
 package cn.zdxiang.superinvoker.application;
 
-import android.util.Log;
-
 import com.marswin89.marsdaemon.DaemonApplication;
 
 import cn.zdxiang.invoker.InvokerEngine;
-import cn.zdxiang.superinvoker.service.InvokerService;
+import cn.zdxiang.superinvoker.service.WorkingService;
 
 
 /**
@@ -17,20 +15,14 @@ import cn.zdxiang.superinvoker.service.InvokerService;
 public class MyApplication extends DaemonApplication {
 
     @Override
-    public void onCreate() {
-        Log.d("MyApplication", "MyApplication onCreate");
-        super.onCreate();
-    }
-
-    @Override
     protected void startYourService() {
-        InvokerEngine.initialize(InvokerService.class, InvokerEngine.DEFAULT_WAKE_UP_INTERVAL);
-        InvokerService.start(this);
+        InvokerEngine.initialize(WorkingService.class, InvokerEngine.DEFAULT_WAKE_UP_INTERVAL);
+        WorkingService.start(this);
     }
 
     @Override
     protected String getYourProcessName() {
-        return "cn.zdxiang.superinvoker:invokerservice";
+        return "cn.zdxiang.superinvoker:secure";
     }
 
     @Override
@@ -40,6 +32,6 @@ public class MyApplication extends DaemonApplication {
 
     @Override
     protected String getYourServiceCanonicalName() {
-        return InvokerService.class.getCanonicalName();
+        return WorkingService.class.getCanonicalName();
     }
 }
