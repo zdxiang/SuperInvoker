@@ -1,5 +1,5 @@
 # SuperInvoker
-Fuck me
+
 ###### Step 1
 * maven { url "https://jitpack.io" }
 * compile 'com.github.zdxiang:SuperInvoker:the lasted version'
@@ -13,3 +13,11 @@ Fuck me
 
 ###### Step 3
 * Set your manifest file
+
+You can guide the user to set the automatic start.<br>
+
+    if (!IntentWrapperUtils.isIntentWrapperSet(context)) { 
+    IntentWrapper.whiteListMatters(context, activity, "some tips you want"); 
+    };
+
+## For more details,see the samples
