@@ -34,3 +34,8 @@ You can guide the user to set the automatic start.<br>
     };
 
 ## For more details,see the samples
+
+## oom_adj
+![alt text](https://github.com/zdxiang/SuperInvoker/blob/master/oom_adj.jpg "title")
+
+
