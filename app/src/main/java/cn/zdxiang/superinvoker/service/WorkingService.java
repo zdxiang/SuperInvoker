@@ -3,6 +3,7 @@ package cn.zdxiang.superinvoker.service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
 
@@ -43,6 +44,7 @@ public class WorkingService extends BaseBizService {
 
     @Override
     public void startWork(Intent intent, int flags, int startId) {
+        Log.d("workingservice", "==>startWork");
         sSubscription = Observable
                 .interval(1, TimeUnit.HOURS)
                 //取消任务时取消定时唤醒

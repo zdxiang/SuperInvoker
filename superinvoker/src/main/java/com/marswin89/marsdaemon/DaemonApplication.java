@@ -88,6 +88,18 @@ public abstract class DaemonApplication extends Application {
         return new DaemonConfigurations(configuration1, configuration2, listener);
     }
 
+    public void onWatchDaemonDead() {
+
+    }
+
+    public void onPersistentStart(Context context) {
+
+    }
+
+    public void onDaemonAssistantStart(Context context) {
+
+    }
+
 
     private class MyDaemonListener implements DaemonConfigurations.DaemonListener {
         @Override
@@ -102,7 +114,7 @@ public abstract class DaemonApplication extends Application {
 
         @Override
         public void onWatchDaemonDaed() {
-            Log.d(TAG, "onWatchDaemonDaed");
+            Log.d(TAG, "onWatchDaemonDead");
         }
     }
 }

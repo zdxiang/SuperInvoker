@@ -34,4 +34,12 @@ public class MyApplication extends DaemonApplication {
     protected String getYourServiceCanonicalName() {
         return WorkingService.class.getCanonicalName();
     }
+
+
+    @Override
+    public void onWatchDaemonDead() {
+        super.onWatchDaemonDead();
+        InvokerEngine.initialize(WorkingService.class, InvokerEngine.DEFAULT_WAKE_UP_INTERVAL);
+        WorkingService.start(this);
+    }
 }
