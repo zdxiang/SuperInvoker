@@ -25,7 +25,7 @@ import rx.functions.Action1;
 /**
  * @author jm
  * @date 17-4-27.上午10:19
- * @description DaemonApplication
+ * @description WatchDogService
  */
 
 public class WatchDogService extends Service {
