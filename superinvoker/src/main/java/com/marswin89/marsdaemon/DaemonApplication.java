@@ -2,6 +2,7 @@ package com.marswin89.marsdaemon;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 import com.marswin89.marsdaemon.receiver.EmptyReceiver;
@@ -26,6 +27,9 @@ public abstract class DaemonApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         mDaemonClient = new DaemonClient(createDaemonConfigurations());
+        if (Build.CPU_ABI.equals("arm64-v8a")){
+            mDaemonClient.setDaemonPermiiting(base, false);
+        }
         if (mDaemonClient.isDaemonPermitting(base)) {
             boolean b = mDaemonClient.onAttachBaseContext(base);
             if (!b) {
