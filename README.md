@@ -1,7 +1,7 @@
 # SuperInvoker
 [![Developer](https://img.shields.io/badge/Developer-Jm-brightgreen.svg)](https://github.com/zdxiang)
 
-#### Features(Not 100%)
+#### Features(Not 100%,Please use carefully)
 * Keep your application live.
 * Wake up your application.
 
@@ -11,10 +11,18 @@
 * compile 'com.github.zdxiang:SuperInvoker:the lasted version'
 
 ###### Maven
-	<dependency>
-	    <groupId>com.github.User</groupId>
-	    <artifactId>Repo</artifactId>
-	    <version>Tag</version>
+		<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+	
+	
+		<dependency>
+	    <groupId>com.github.zdxiang</groupId>
+	    <artifactId>SuperInvoker</artifactId>
+	    <version>the lasted version</version>
 	</dependency>
 
 #### Step 2
