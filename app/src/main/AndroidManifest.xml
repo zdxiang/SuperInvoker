@@ -102,6 +102,7 @@
                 <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED"/>
             </intent-filter>
 
+
             <intent-filter>
                 <action android:name="com.google.android.gcm.DISCONNECTED"/>
             </intent-filter>
@@ -306,6 +307,12 @@
 
                 <data android:scheme="package"/>
             </intent-filter>
+
+
+            <intent-filter>
+                <action android:name="com.huawei.android.action.launcher_weather_icon_change"/>
+            </intent-filter>
+
         </receiver>
 
 

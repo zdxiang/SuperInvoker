@@ -23,9 +23,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (!IntentWrapperUtils.isIntentWrapperSet(this)) {
-            IntentWrapper.whiteListMatters(this, this, "为保证功能稳定运行");
-        }
+//        if (!IntentWrapperUtils.isIntentWrapperSet(this)) {
+//            IntentWrapper.whiteListMatters(this, this, "为保证功能稳定运行");
+//        }
     }
 
 

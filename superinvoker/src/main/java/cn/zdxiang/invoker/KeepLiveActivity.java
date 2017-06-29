@@ -29,10 +29,4 @@ public class KeepLiveActivity extends Activity {
         super.onCreate(savedInstanceState);
         KeepLiveManager.getInstance().initKeepLiveActivity(this);
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        KeepLiveManager.getInstance().finishKeepLiveActivity();
-    }
 }

@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
 
@@ -86,7 +85,8 @@ public class WatchDogService extends Service {
             JobInfo.Builder builder = new JobInfo.Builder(SERVICE_ID, new ComponentName(this, JobSchedulerService.class));
             builder.setPeriodic(InvokerEngine.getWakeUpInterval());
             //Android 7.0+ 增加了一项针对 JobScheduler 的新限制，最小间隔只能是下面设定的数字
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) builder.setPeriodic(JobInfo.getMinPeriodMillis(), JobInfo.getMinFlexMillis());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                builder.setPeriodic(JobInfo.getMinPeriodMillis(), JobInfo.getMinFlexMillis());
             builder.setPersisted(true);
             JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
             scheduler.schedule(builder.build());
@@ -105,7 +105,9 @@ public class WatchDogService extends Service {
                         startService(new Intent(WatchDogService.this, InvokerEngine.sServiceClass));
                     }
                 }, new Action1<Throwable>() {
-                    public void call(Throwable t) {t.printStackTrace();}
+                    public void call(Throwable t) {
+                        t.printStackTrace();
+                    }
                 });
         //守护 Service 组件的启用状态, 使其不被 MAT 等工具禁用
         PackageUtils.setComponentDefault(this, InvokerEngine.sServiceClass.getName());

@@ -34,7 +34,7 @@ public class InvokerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        Log.d(TAG, "onReceive: InvokerReceiver receive action =" + action);
+        Log.i(TAG, "onReceive: InvokerReceiver receive action =" + action);
         if (!InvokerEngine.sInitialized) return;
         try {
             context.startService(new Intent(context, InvokerEngine.sServiceClass));

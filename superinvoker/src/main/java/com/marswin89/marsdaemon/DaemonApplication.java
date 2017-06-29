@@ -27,9 +27,9 @@ public abstract class DaemonApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         mDaemonClient = new DaemonClient(createDaemonConfigurations());
-        if (Build.CPU_ABI.equals("arm64-v8a")){
-            mDaemonClient.setDaemonPermiiting(base, false);
-        }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP||Build.CPU_ABI.equals("arm64-v8a")) {
+                mDaemonClient.setDaemonPermiiting(base, false);
+            }
         if (mDaemonClient.isDaemonPermitting(base)) {
             boolean b = mDaemonClient.onAttachBaseContext(base);
             if (!b) {

@@ -9,7 +9,8 @@ import cn.zdxiang.invoker.service.BaseBizService;
  */
 
 public class InvokerEngine {
-    private InvokerEngine() {}
+    private InvokerEngine() {
+    }
 
     public static final int DEFAULT_WAKE_UP_INTERVAL = 6 * 60 * 1000;
 

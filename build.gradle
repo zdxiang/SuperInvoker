@@ -20,16 +20,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-ext {
-    // Version of compile sdk
-    COMPILE_SDK_VERSION = 25
-    // Version of Android build tool
-    BUILD_TOOLS_VERSION = "25.0.2"
-    // Min version of Android sdk
-    MIN_SDK_VERSION = 19
-    // Version of target Android sdk
-    TARGET_SDK_VERSION = 25
-    // Use progurad or not
-    MINIFY_ENABLED = false
-}
