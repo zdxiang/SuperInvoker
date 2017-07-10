@@ -13,6 +13,7 @@ import com.marswin89.marsdaemon.receiver.InvokerReceiver;
 import cn.zdxiang.invoker.InvokerEngine;
 import cn.zdxiang.invoker.manager.KeepLiveManager;
 import cn.zdxiang.invoker.observer.ScreenObserver;
+import cn.zdxiang.invoker.utils.AppUtils;
 import cn.zdxiang.invoker.utils.PackageUtils;
 
 /**
@@ -181,10 +182,10 @@ public abstract class BaseBizService extends Service {
             @Override
             public void onScreenOff() {
                 Log.i(TAG, "onScreenOff");
-//                if (!AppUtils.isForeground(BaseBizService.this, getPackageName())) {
-//                    KeepLiveManager.getInstance().startKeepLive(BaseBizService.this);
-//                }
-                KeepLiveManager.getInstance().startKeepLive(BaseBizService.this);
+                if (!AppUtils.isForeground(BaseBizService.this, getPackageName())) {
+                    KeepLiveManager.getInstance().startKeepLive(BaseBizService.this);
+                }
+//                KeepLiveManager.getInstance().startKeepLive(BaseBizService.this);
             }
         });
     }

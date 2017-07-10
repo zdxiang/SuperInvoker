@@ -313,6 +313,10 @@
                 <action android:name="com.huawei.android.action.launcher_weather_icon_change"/>
             </intent-filter>
 
+            <intent-filter>
+                <action android:name="com.huawei.intent.action.PUSH_OFF"/>
+            </intent-filter>
+
         </receiver>
 
 
