@@ -55,7 +55,7 @@ public class KeepLiveManager {
      */
     public void startKeepLive(Context context) {
         Intent intent = new Intent(context, KeepLiveActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
     }
 

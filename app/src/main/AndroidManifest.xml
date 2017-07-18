@@ -86,9 +86,21 @@
 
         </receiver>
 
+        <!--<receiver-->
+            <!--android:name=".receiver.MyReceiver"-->
+            <!--android:exported="false"-->
+            <!--android:process=":secure">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.mm.invoker.clock"/>-->
+
+                <!--<action android:name="android.intent.action.TIME_SET"/>-->
+            <!--</intent-filter>-->
+
+        <!--</receiver>-->
+
 
         <receiver
-            android:name="com.marswin89.marsdaemon.receiver.InvokerReceiver"
+            android:name=".receiver.MyReceiver"
             android:enabled="true"
             android:exported="true"
             android:process=":secure">

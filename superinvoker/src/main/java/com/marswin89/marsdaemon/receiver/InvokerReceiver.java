@@ -15,7 +15,7 @@ import cn.zdxiang.invoker.manager.KeepLiveManager;
  * @description InvokerReceiver
  */
 
-public class InvokerReceiver extends BroadcastReceiver {
+public  class InvokerReceiver extends BroadcastReceiver {
 
     public static final String TAG = InvokerReceiver.class.getSimpleName();
 
@@ -34,15 +34,20 @@ public class InvokerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        Log.i(TAG, "onReceive: InvokerReceiver receive action =" + action);
+        Log.d(TAG, "onReceive: InvokerReceiver receive action =" + action);
         if (!InvokerEngine.sInitialized) return;
-        try {
-            context.startService(new Intent(context, InvokerEngine.sServiceClass));
-        } catch (Exception ignored) {
+        Log.d(TAG, "1");
 
+        if (!InvokerEngine.sInitialized) {
+            try {
+                context.startService(new Intent(context, InvokerEngine.sServiceClass));
+                Log.d(TAG, "2");
+            } catch (Exception ignored) {
+
+            }
         }
 
-
+        Log.d(TAG, "3");
         switch (action) {
 
             case Intent.ACTION_USER_PRESENT:
@@ -52,7 +57,11 @@ public class InvokerReceiver extends BroadcastReceiver {
 //            case ACTION_TENCENT_REFRESH_WXAPP:
 //                InvokerService.start(context);
 //                break;
+
+
         }
+        Log.d(TAG, "4");
+//        onMyReceiver(context, intent);
     }
 }
 

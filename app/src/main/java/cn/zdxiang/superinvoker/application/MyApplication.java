@@ -22,7 +22,7 @@ public class MyApplication extends DaemonApplication {
 
     @Override
     protected String getYourProcessName() {
-        return "cn.zdxiang.superinvoker:secure";
+        return "cn.zdxiang.superinvoker";
     }
 
     @Override
